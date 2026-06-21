@@ -32,6 +32,18 @@ const I = {
 
 const brl = (v) => Number(v || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
+const maskCNPJ = (v) => {
+  const d = (v || "").replace(/\D/g, "").slice(0, 14);
+  return d.replace(/^(\d{2})(\d)/, "$1.$2").replace(/^(\d{2}\.\d{3})(\d)/, "$1.$2").replace(/^(\d{2}\.\d{3}\.\d{3})(\d)/, "$1/$2").replace(/^(\d{2}\.\d{3}\.\d{3}\/\d{4})(\d)/, "$1-$2");
+};
+const cnpjValid = (v) => (v || "").replace(/\D/g, "").length === 14;
+
+const maskPhone = (v) => {
+  const d = (v || "").replace(/\D/g, "").slice(0, 11);
+  if (d.length <= 10) return d.replace(/^(\d{2})(\d)/, "($1) $2").replace(/(\d{4})(\d)/, "$1-$2");
+  return d.replace(/^(\d{2})(\d)/, "($1) $2").replace(/(\d{5})(\d)/, "$1-$2");
+};
+
 // ─── Mapeamento camelCase <-> colunas snake_case do Supabase ──────────────────
 const customerToRow   = (c, userId) => ({ user_id: userId, nome: c.nome ?? null, email: c.email ?? null, telefone: c.telefone ?? null, cidade: c.cidade ?? null });
 const customerFromRow = (r) => ({ id: r.id, nome: r.nome, email: r.email, telefone: r.telefone, cidade: r.cidade });
@@ -380,6 +392,10 @@ export default function App() {
   };
 
   const save = async () => {
+    if (drawer.type === "supplier" && !cnpjValid(form.cnpj)) {
+      alert("CNPJ inválido. Preencha os 14 dígitos.");
+      return;
+    }
     const t = TABLES[drawer.type];
     const row = t.to(form, session.user.id);
     try {
@@ -545,8 +561,8 @@ export default function App() {
           <button onClick={closeDrawer} style={{ background: "none", border: "none", cursor: "pointer", color: C.sub, display: "flex", padding: 4 }}><Ico d={I.x} size={18} /></button>
         </div>
         <div style={{ flex: 1, overflowY: "auto", padding: mobile ? "16px 20px" : "20px 24px" }}>
-          {drawer.type === "customer" && <><Inp label="Nome" value={form.nome} onChange={(v) => setF("nome", v)} /><Inp label="E-mail" value={form.email} onChange={(v) => setF("email", v)} type="email" /><Inp label="Telefone" value={form.telefone} onChange={(v) => setF("telefone", v)} placeholder="(00) 00000-0000" /><Inp label="Cidade" value={form.cidade} onChange={(v) => setF("cidade", v)} /></>}
-          {drawer.type === "supplier" && <><Inp label="Razão Social" value={form.razaoSocial} onChange={(v) => setF("razaoSocial", v)} /><Inp label="CNPJ" value={form.cnpj} onChange={(v) => setF("cnpj", v)} placeholder="00.000.000/0001-00" /><Inp label="Contato" value={form.contato} onChange={(v) => setF("contato", v)} /><Sel label="Categoria" value={form.categoria} onChange={(v) => setF("categoria", v)} opts={["Distribuidora", "Logística", "Fabricante", "Representante", "Outro"]} /></>}
+          {drawer.type === "customer" && <><Inp label="Nome" value={form.nome} onChange={(v) => setF("nome", v)} /><Inp label="E-mail" value={form.email} onChange={(v) => setF("email", v)} type="email" /><Inp label="Telefone" value={form.telefone} onChange={(v) => setF("telefone", maskPhone(v))} placeholder="(00) 00000-0000" /><Inp label="Cidade" value={form.cidade} onChange={(v) => setF("cidade", v)} /></>}
+          {drawer.type === "supplier" && <><Inp label="Razão Social" value={form.razaoSocial} onChange={(v) => setF("razaoSocial", v)} /><Inp label="CNPJ" value={form.cnpj} onChange={(v) => setF("cnpj", maskCNPJ(v))} placeholder="00.000.000/0001-00" /><Inp label="Contato" value={form.contato} onChange={(v) => setF("contato", v)} /><Sel label="Categoria" value={form.categoria} onChange={(v) => setF("categoria", v)} opts={["Distribuidora", "Logística", "Fabricante", "Representante", "Outro"]} /></>}
           {drawer.type === "sale" && <><Sel label="Cliente" value={form.cliente} onChange={(v) => setF("cliente", v)} opts={customers.map((c) => c.nome)} /><Inp label="Produto" value={form.produto} onChange={(v) => setF("produto", v)} /><Inp label="Quantidade" value={form.qtd} onChange={(v) => setF("qtd", v)} type="number" /><Inp label="Valor Unitário (R$)" value={form.valorUnit} onChange={(v) => setF("valorUnit", v)} type="number" /><Inp label="Data" value={form.data} onChange={(v) => setF("data", v)} type="date" /><Sel label="Status" value={form.status} onChange={(v) => setF("status", v)} opts={["Pendente", "Concluída", "Cancelada"]} /></>}
         </div>
         <div style={{ padding: mobile ? "12px 20px 28px" : "16px 24px", borderTop: `1px solid ${C.border}`, display: "flex", flexDirection: mobile ? "column" : "row", gap: 8 }}>
