@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURUM | Clinica de Estetica de Luxo</title>
+<meta name="description" content="AURUM - Clinica de estetica de luxo em Sao Paulo. Tratamentos faciais e corporais com tecnologia de ponta e atendimento personalizado.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}
+}
+
+/* ===== CSS VARIABLES ===== */
+:root{
+  --black:#0D0C0A;
+  --surface:#17140F;
+  --gold:#CBA135;
+  --gold-bright:#E8C766;
+  --ivory:#EDE6D6;
+  --taupe:#9C8F72;
+  --nav-height:72px;
+  --font-serif:'Fraunces',serif;
+  --font-sans:'Inter',sans-serif;
+  --transition:0.35s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="light"]{
+  --black:#F5F3F0;
+  --surface:#FFFFFF;
+  --gold:#B8860B;
+  --gold-bright:#D4AF37;
+  --ivory:#1A1A1A;
+  --taupe:#4A4A4A;
+}
+
+body{
+  font-family:var(--font-sans);
+  background:var(--black);
+  color:var(--ivory);
+  line-height:1.7;
+  overflow-x:hidden;
+  transition:background var(--transition),color var(--transition);
+}
+
+/* ===== FOCUS VISIBLE ===== */
+:focus-visible{
+  outline:2px solid var(--gold-bright);
+  outline-offset:3px;
+  border-radius:2px;
+}
+
+/* ===== UTILITY ===== */
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.section-pad{padding:100px 0}
+
+/* ===== SCROLL REVEAL ===== */
+.reveal{
+  opacity:0;
+  transform:translateY(40px);
+  transition:opacity 0.8s cubic-bezier(.4,0,.2,1),transform 0.8s cubic-bezier(.4,0,.2,1);
+}
+.reveal.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ===== NAVIGATION ===== */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  height:var(--nav-height);
+  background:rgba(13,12,10,0.92);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(203,161,53,0.1);
+  transition:background var(--transition),border-color var(--transition);
+}
+[data-theme="light"] .nav{
+  background:rgba(255,255,255,0.92);
+  border-bottom-color:rgba(184,134,11,0.15);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  height:100%;max-width:1200px;margin:0 auto;padding:0 24px;
+}
+.nav-brand{
+  font-family:var(--font-serif);
+  font-size:1.5rem;
+  font-weight:600;
+  color:var(--gold);
+  letter-spacing:0.15em;
+  text-decoration:none;
+  transition:color var(--transition);
+}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+.nav-links a{
+  font-size:0.85rem;font-weight:400;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--ivory);text-decoration:none;
+  position:relative;transition:color var(--transition);
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;
+  width:0;height:1px;background:var(--gold);
+  transition:width var(--transition);
+}
+.nav-links a:hover::after,.nav-links a:focus-visible::after{width:100%}
+.nav-links a:hover{color:var(--gold)}
+
+/* Theme toggle */
+.theme-toggle{
+  background:none;border:1px solid var(--taupe);
+  width:40px;height:40px;border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--ivory);transition:border-color var(--transition),color var(--transition);
+}
+.theme-toggle:hover{border-color:var(--gold);color:var(--gold)}
+.theme-toggle svg{width:18px;height:18px;fill:currentColor}
+.theme-toggle .icon-sun{display:none}
+[data-theme="light"] .theme-toggle .icon-moon{display:none}
+[data-theme="light"] .theme-toggle .icon-sun{display:block}
+
+/* Hamburger */
+.hamburger{
+  display:none;background:none;border:none;cursor:pointer;
+  width:32px;height:24px;position:relative;
+  flex-direction:column;justify-content:space-between;
+}
+.hamburger span{
+  display:block;height:2px;width:100%;background:var(--ivory);
+  border-radius:2px;transition:all 0.3s ease;
+}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(7px,7px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(7px,-7px)}
+
+@media(max-width:768px){
+  .hamburger{display:flex}
+  .nav-links{
+    position:fixed;top:var(--nav-height);left:0;right:0;bottom:0;
+    background:var(--black);
+    flex-direction:column;justify-content:center;gap:40px;
+    transform:translateX(100%);transition:transform 0.4s ease;
+    z-index:999;
+  }
+  .nav-links.open{transform:translateX(0)}
+  .nav-links a{font-size:1.1rem}
+}
+
+/* ===== HERO — ALWAYS DARK ===== */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+  background:#0D0C0A;
+  overflow:hidden;
+  padding-top:var(--nav-height);
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 40%,rgba(203,161,53,0.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-content{position:relative;z-index:2;padding:0 24px}
+.hero-title{
+  font-family:var(--font-serif);
+  font-size:clamp(4rem,12vw,9rem);
+  font-weight:300;
+  letter-spacing:0.2em;
+  color:#EDE6D6;
+  line-height:1;
+  margin-bottom:24px;
+}
+.hero-subtitle{
+  font-family:var(--font-serif);
+  font-size:clamp(1rem,2.5vw,1.4rem);
+  font-weight:300;
+  font-style:italic;
+  color:#E8C766;
+  letter-spacing:0.06em;
+  margin-bottom:48px;
+}
+.hero-cta{
+  display:inline-block;
+  padding:16px 48px;
+  border:1px solid #E8C766;
+  color:#EDE6D6;
+  background:transparent;
+  font-family:var(--font-sans);
+  font-size:0.85rem;
+  font-weight:500;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  text-decoration:none;
+  cursor:pointer;
+  transition:background 0.4s ease,color 0.4s ease;
+}
+.hero-cta:hover,.hero-cta:focus-visible{
+  background:#E8C766;
+  color:#0D0C0A;
+}
+
+/* Hero seal */
+.hero-seal{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:min(500px,80vw);
+  height:min(500px,80vw);
+  opacity:0.06;
+  z-index:1;
+  pointer-events:none;
+}
+.hero-seal svg{width:100%;height:100%}
+@media(prefers-reduced-motion:no-preference){
+  .hero-seal svg{animation:seal-rotate 60s linear infinite}
+}
+@keyframes seal-rotate{to{transform:rotate(360deg)}}
+
+/* ===== SECTION HEADINGS ===== */
+.section-title{
+  font-family:var(--font-serif);
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--ivory);
+  margin-bottom:16px;
+  transition:color var(--transition);
+}
+.section-label{
+  font-size:0.75rem;
+  font-weight:500;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:12px;
+  display:block;
+  transition:color var(--transition);
+}
+.section-divider{
+  width:60px;height:1px;
+  background:var(--gold);
+  margin:24px 0 40px;
+  transition:background var(--transition);
+}
+.section-divider.center{margin-left:auto;margin-right:auto}
+
+/* ===== SOBRE ===== */
+.sobre{background:var(--black);transition:background var(--transition)}
+.sobre-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+}
+.sobre-text p{
+  color:var(--taupe);
+  font-size:0.95rem;
+  margin-bottom:20px;
+  transition:color var(--transition);
+}
+.sobre-text p:first-of-type{
+  font-size:1.05rem;
+  color:var(--ivory);
+}
+.sobre-visual{
+  position:relative;
+  height:400px;
+  background:var(--surface);
+  border:1px solid rgba(203,161,53,0.15);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  transition:background var(--transition),border-color var(--transition);
+}
+.sobre-visual-inner{
+  font-family:var(--font-serif);
+  font-size:6rem;
+  font-weight:300;
+  color:var(--gold);
+  opacity:0.15;
+  letter-spacing:0.1em;
+  transition:color var(--transition);
+}
+.sobre-visual::before{
+  content:'';position:absolute;inset:16px;
+  border:1px solid rgba(203,161,53,0.1);
+  pointer-events:none;
+}
+@media(max-width:768px){
+  .sobre-grid{grid-template-columns:1fr;gap:40px}
+  .sobre-visual{height:240px}
+}
+
+/* ===== TRATAMENTOS ===== */
+.tratamentos{background:var(--surface);transition:background var(--transition)}
+.tabs-nav{
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin-bottom:48px;
+  border-bottom:1px solid rgba(203,161,53,0.15);
+  padding-bottom:0;
+}
+.tab-btn{
+  padding:14px 24px;
+  background:none;border:none;
+  font-family:var(--font-sans);
+  font-size:0.82rem;
+  font-weight:500;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--taupe);
+  cursor:pointer;
+  position:relative;
+  transition:color var(--transition);
+  border-bottom:2px solid transparent;
+  margin-bottom:-1px;
+}
+.tab-btn:hover{color:var(--ivory)}
+.tab-btn.active{
+  color:var(--gold);
+  border-bottom-color:var(--gold);
+}
+.tab-panel{display:none;animation:tabFade 0.4s ease}
+.tab-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+@keyframes tabFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.tab-info h3{
+  font-family:var(--font-serif);
+  font-size:1.8rem;
+  font-weight:400;
+  color:var(--ivory);
+  margin-bottom:20px;
+  transition:color var(--transition);
+}
+.tab-info p{
+  color:var(--taupe);
+  font-size:0.95rem;
+  margin-bottom:28px;
+  line-height:1.8;
+  transition:color var(--transition);
+}
+.tab-benefits{list-style:none;margin-bottom:32px}
+.tab-benefits li{
+  padding:8px 0;
+  padding-left:20px;
+  position:relative;
+  color:var(--taupe);
+  font-size:0.9rem;
+  transition:color var(--transition);
+}
+.tab-benefits li::before{
+  content:'';position:absolute;left:0;top:50%;
+  width:6px;height:6px;
+  background:var(--gold);
+  border-radius:50%;
+  transform:translateY(-50%);
+}
+.tab-meta{
+  display:flex;gap:40px;
+  padding-top:24px;
+  border-top:1px solid rgba(203,161,53,0.12);
+}
+.tab-meta-item{display:flex;flex-direction:column;gap:4px}
+.tab-meta-label{
+  font-size:0.7rem;font-weight:500;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--taupe);
+  transition:color var(--transition);
+}
+.tab-meta-value{
+  font-family:var(--font-serif);
+  font-size:1.3rem;font-weight:500;
+  color:var(--gold-bright);
+  transition:color var(--transition);
+}
+.tab-visual{
+  background:var(--black);
+  border:1px solid rgba(203,161,53,0.1);
+  height:100%;min-height:350px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background var(--transition),border-color var(--transition);
+}
+.tab-visual-icon{
+  width:80px;height:80px;
+  color:var(--gold);
+  opacity:0.3;
+  transition:color var(--transition);
+}
+@media(max-width:768px){
+  .tab-panel.active{grid-template-columns:1fr}
+  .tabs-nav{gap:4px}
+  .tab-btn{padding:10px 14px;font-size:0.75rem}
+  .tab-visual{min-height:200px}
+}
+
+/* ===== STATS ===== */
+.stats{
+  background:var(--black);
+  border-top:1px solid rgba(203,161,53,0.1);
+  border-bottom:1px solid rgba(203,161,53,0.1);
+  transition:background var(--transition),border-color var(--transition);
+}
+.stats-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:40px;
+  text-align:center;padding:60px 0;
+}
+.stat-number{
+  font-family:var(--font-serif);
+  font-size:clamp(2.5rem,5vw,3.5rem);
+  font-weight:400;
+  color:var(--gold-bright);
+  line-height:1;
+  margin-bottom:12px;
+  transition:color var(--transition);
+}
+.stat-label{
+  font-size:0.85rem;
+  color:var(--taupe);
+  letter-spacing:0.05em;
+  transition:color var(--transition);
+}
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr;gap:32px}
+}
+
+/* ===== DEPOIMENTOS ===== */
+.depoimentos{background:var(--surface);transition:background var(--transition)}
+.depoimentos-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px;
+}
+.dep-card{
+  background:var(--black);
+  border:1px solid rgba(203,161,53,0.1);
+  padding:40px 32px;
+  position:relative;
+  transition:background var(--transition),border-color var(--transition),transform 0.3s ease;
+}
+.dep-card:hover{transform:translateY(-4px)}
+.dep-quote{
+  font-family:var(--font-serif);
+  font-size:3rem;
+  color:var(--gold);
+  opacity:0.3;
+  line-height:1;
+  margin-bottom:16px;
+  transition:color var(--transition);
+}
+.dep-text{
+  color:var(--taupe);
+  font-size:0.92rem;
+  font-style:italic;
+  margin-bottom:28px;
+  line-height:1.8;
+  transition:color var(--transition);
+}
+.dep-author{
+  font-weight:600;
+  font-size:0.85rem;
+  color:var(--ivory);
+  margin-bottom:4px;
+  transition:color var(--transition);
+}
+.dep-treatment{
+  font-size:0.75rem;
+  color:var(--gold);
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  transition:color var(--transition);
+}
+
+/* ===== CONTATO ===== */
+.contato{background:var(--black);transition:background var(--transition)}
+.contato-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;
+}
+.contato-info{display:flex;flex-direction:column;gap:32px}
+.contato-item{display:flex;flex-direction:column;gap:4px}
+.contato-item-label{
+  font-size:0.7rem;font-weight:500;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--gold);
+  transition:color var(--transition);
+}
+.contato-item-value{
+  color:var(--ivory);
+  font-size:0.95rem;
+  transition:color var(--transition);
+}
+.contato-item-value a{
+  color:var(--ivory);text-decoration:none;
+  transition:color var(--transition);
+}
+.contato-item-value a:hover{color:var(--gold)}
+
+.form-group{margin-bottom:24px}
+.form-group label{
+  display:block;
+  font-size:0.75rem;font-weight:500;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--taupe);
+  margin-bottom:8px;
+  transition:color var(--transition);
+}
+.form-group input,.form-group textarea{
+  width:100%;
+  padding:14px 16px;
+  background:var(--surface);
+  border:1px solid rgba(203,161,53,0.15);
+  color:var(--ivory);
+  font-family:var(--font-sans);
+  font-size:0.9rem;
+  transition:border-color var(--transition),background var(--transition),color var(--transition);
+  outline:none;
+}
+.form-group input:focus,.form-group textarea:focus{
+  border-color:var(--gold);
+}
+.form-group textarea{resize:vertical;min-height:120px}
+.form-submit{
+  display:inline-block;
+  padding:16px 48px;
+  border:1px solid var(--gold);
+  background:transparent;
+  color:var(--gold);
+  font-family:var(--font-sans);
+  font-size:0.82rem;
+  font-weight:500;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:background var(--transition),color var(--transition),border-color var(--transition);
+}
+.form-submit:hover,.form-submit:focus-visible{
+  background:var(--gold);
+  color:var(--black);
+}
+.form-success{
+  display:none;
+  padding:24px;
+  border:1px solid var(--gold);
+  text-align:center;
+  margin-top:20px;
+}
+.form-success.show{display:block}
+.form-success p{
+  color:var(--gold);
+  font-family:var(--font-serif);
+  font-size:1.1rem;
+}
+@media(max-width:768px){
+  .contato-grid{grid-template-columns:1fr;gap:48px}
+}
+
+/* ===== FOOTER ===== */
+.footer{
+  background:var(--surface);
+  border-top:1px solid rgba(203,161,53,0.1);
+  padding:40px 0;
+  text-align:center;
+  transition:background var(--transition),border-color var(--transition);
+}
+.footer p{
+  font-size:0.8rem;
+  color:var(--taupe);
+  transition:color var(--transition);
+}
+.footer a{
+  color:var(--gold);
+  text-decoration:none;
+  transition:color var(--transition);
+}
+.footer a:hover{color:var(--gold-bright)}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav" role="navigation" aria-label="Menu principal">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand" aria-label="AURUM - Pagina inicial">AURUM</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#tratamentos">Tratamentos</a></li>
+      <li><a href="#depoimentos">Depoimentos</a></li>
+      <li><a href="#contato">Contato</a></li>
+      <li>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema claro/escuro">
+          <svg class="icon-moon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Zm11.394-5.834a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59Zm-1.06 13.668a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM3.22 18.894a.75.75 0 0 0 1.06 0l1.591-1.59a.75.75 0 1 0-1.06-1.061l-1.591 1.59a.75.75 0 0 0 0 1.061Zm1.06-13.668a.75.75 0 0 1 1.06 0l1.591 1.59a.75.75 0 0 1-1.06 1.061L4.28 6.287a.75.75 0 0 1 0-1.06ZM2.25 12a.75.75 0 0 1 .75-.75h2.25a.75.75 0 0 1 0 1.5H3a.75.75 0 0 1-.75-.75Zm15.75 0a.75.75 0 0 1 .75-.75H21a.75.75 0 0 1 0 1.5h-2.25a.75.75 0 0 1-.75-.75Z"/></svg>
+        </button>
+      </li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO (always dark) ===== -->
+<section class="hero">
+  <div class="hero-seal" aria-hidden="true">
+    <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="250" cy="250" r="240" fill="none" stroke="#CBA135" stroke-width="0.5"/>
+      <circle cx="250" cy="250" r="200" fill="none" stroke="#CBA135" stroke-width="0.3"/>
+      <circle cx="250" cy="250" r="160" fill="none" stroke="#CBA135" stroke-width="0.3"/>
+      <path d="M250 50 L270 200 L420 130 L290 230 L450 250 L290 270 L420 370 L270 300 L250 450 L230 300 L80 370 L210 270 L50 250 L210 230 L80 130 L230 200 Z" fill="none" stroke="#CBA135" stroke-width="0.5"/>
+      <text x="250" y="245" text-anchor="middle" font-family="serif" font-size="14" fill="#CBA135" letter-spacing="8" opacity="0.6">E S T E T I C A</text>
+      <text x="250" y="270" text-anchor="middle" font-family="serif" font-size="10" fill="#CBA135" letter-spacing="6" opacity="0.4">DE LUXO</text>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <h1 class="hero-title">AURUM</h1>
+    <p class="hero-subtitle">A beleza nao se constroi. Lapida-se.</p>
+    <a href="#contato" class="hero-cta">Agendar consulta</a>
+  </div>
+</section>
+
+<!-- ===== SOBRE ===== -->
+<section class="sobre section-pad" id="sobre">
+  <div class="container">
+    <div class="sobre-grid">
+      <div class="sobre-text reveal">
+        <span class="section-label">Sobre nos</span>
+        <h2 class="section-title">Uma nova era da estetica de luxo</h2>
+        <div class="section-divider"></div>
+        <p>A Aurum nasceu da crenca de que cada pessoa carrega uma beleza unica, que merece ser revelada com precisao, ciencia e sensibilidade. Nao seguimos tendencias passageiras -- criamos resultados que transcendem o tempo.</p>
+        <p>Nossa clinica combina tecnologia de ponta com protocolos personalizados, desenvolvidos para realcar a singularidade de cada paciente. Cada consulta e uma experiencia: da recepcao ao tratamento, cada detalhe e pensado para proporcionar conforto, confianca e resultados excepcionais.</p>
+        <p>Acreditamos que a verdadeira estetica nao transforma -- ela revela. E com essa filosofia que guiamos cada procedimento, honrando a individualidade e buscando a harmonia natural.</p>
+      </div>
+      <div class="sobre-visual reveal" aria-hidden="true">
+        <span class="sobre-visual-inner">A</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRATAMENTOS ===== -->
+<section class="tratamentos section-pad" id="tratamentos">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:60px">
+      <span class="section-label">Nossos servicos</span>
+      <h2 class="section-title">Tratamentos</h2>
+      <div class="section-divider center"></div>
+    </div>
+    <div class="reveal">
+      <div class="tabs-nav" role="tablist" aria-label="Tratamentos disponiveis">
+        <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-1" id="tab-1">Limpeza de Pele</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-2" id="tab-2">Harmonizacao Facial</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-3" id="tab-3">Peeling de Diamante</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-4" id="tab-4">Drenagem Linfatica</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-5" id="tab-5">Antiaging com Ouro</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-6" id="tab-6">Microagulhamento</button>
+      </div>
+
+      <!-- Panel 1 -->
+      <div class="tab-panel active" role="tabpanel" id="panel-1" aria-labelledby="tab-1">
+        <div class="tab-info">
+          <h3>Limpeza de Pele Profunda</h3>
+          <p>Procedimento completo de limpeza e renovacao cutanea, que remove impurezas, desobstrui poros e prepara a pele para absorver melhor os ativos de tratamento. Ideal para todos os tipos de pele, com produtos premium selecionados individualmente.</p>
+          <ul class="tab-benefits">
+            <li>Remocao profunda de comedoes e impurezas</li>
+            <li>Renovacao celular e melhora da textura</li>
+            <li>Hidratacao intensiva pos-procedimento</li>
+            <li>Pele mais luminosa e uniforme</li>
+          </ul>
+          <div class="tab-meta">
+            <div class="tab-meta-item">
+              <span class="tab-meta-label">Duracao</span>
+              <span class="tab-meta-value">60 min</span>
+            </div>
+            <div class="tab-meta-item">
+              <span class="tab-meta-label">Investimento</span>
+              <span class="tab-meta-value">R$ 250</span>
+            </div>
+          </div>
+        </div>
+        <div class="tab-visual" aria-hidden="true">
+          <svg class="tab-visual-icon" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1"><circle cx="40" cy="40" r="30"/><circle cx="40" cy="40" r="18"/><circle cx="40" cy="40" r="6"/></svg>
+        </div>
+      </div>
+
+      <!-- Panel 2 -->
+      <div class="tab-panel" role="tabpanel" id="panel-2" aria-labelledby="tab-2">
+        <div class="tab-info">
+          <h3>Harmonizacao Facial</h3>
+          <p>Procedimento estetico avancado com acido hialuronico para restaurar volumes, suavizar linhas e realcar os contornos naturais do rosto. Realizado com tecnicas minimamente invasivas, proporcionando resultados naturais e elegantes.</p>
+          <ul class="tab-benefits">
+            <li>Preenchimento com acido hialuronico premium</li>
+            <li>Definicao de contorno mandibular e malar</li>
+            <li>Suavizacao de sulcos e linhas de expressao</li>
+            <li>Resultado natural e harmonioso</li>
+          </ul>
+          <div class="tab-meta">
+            <div class="tab-meta-item">
+              <span class="tab-meta-label">Duracao</span>
+              <span class="tab-meta-value">90 min</span>
+            </div>
+            <div class="tab-meta-item">
+              <span class="tab-meta-label">Investimento</span>
+              <span class="tab-meta-value">R$ 2.500</span>
+            </div>
+          </div>
+        </div>
+        <div class="tab-visual" aria-hidden="true">
+          <svg class="tab-visual-icon" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1"><ellipse cx="40" cy="35" rx="18" ry="25"/><path d="M28 50 Q40 65 52 50"/></svg>
+        </div>
+      </div>
+
+      <!-- Panel 3 -->
+      <div class="tab-panel" role="tabpanel" id="panel-3" aria-labelledby="tab-3">
+        <div class="tab-info">
+          <h3>Peeling de Diamante</h3>
+          <p>Microdermoabrasao com ponteira de diamante para esfoliacao controlada e precisa. Remove as camadas superficiais da pele, estimulando a renovacao celular e a producao de colageno para uma pele mais jovem e radiante.</p>
+          <ul class="tab-benefits">
+            <li>Esfoliacao precisa e controlada</li>
+            <li>Estimulo a producao de colageno</li>
+            <li>Reducao de manchas e irregularidades</li>
+            <li>Pele mais firme e com brilho natural</li>
+          </ul>
+          <div class="tab-meta">
+            <div class="tab-meta-item">
+              <span class="tab-meta-label">Duracao</span>
+              <span class="tab-meta-value">45 min</span>
+            </div>
+            <div class="tab-meta-item">
+              <span class="tab-meta-label">Investimento</span>
+              <span class="tab-meta-value">R$ 350</span>
+            </div>
+          </div>
+        </div>
+        <div class="tab-visual" aria-hidden="true">
+          <svg class="tab-visual-icon" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1"><polygon points="40,10 51,32 75,35 57,52 62,76 40,64 18,76 23,52 5,35 29,32"/></svg>
+        </div>
+      </div>
+
+      <!-- Panel 4 -->
+      <div class="tab-panel" role="tabpanel" id="panel-4" aria-labelledby="tab-4">
+        <div class="tab-info">
+          <h3>Drenagem Linfatica Modeladora</h3>
+          <p>Massagem terapeutica especializada que estimula o sistema linfatico, reduzindo o inchacho e promovendo a eliminacao de toxinas. Tecnica modeladora que define contornos corporais e proporciona leveza e bem-estar imediatos.</p>
+          <ul class="tab-benefits">
+            <li>Reducao de retencao de liquidos e inchacho</li>
+            <li>Modelagem e definicao de contornos</li>
+            <li>Eliminacao de toxinas e melhora da circulacao</li>
+            <li>Sensacao de leveza e relaxamento profundo</li>
+          </ul>
+          <div class="tab-meta">
+            <div class="tab-meta-item">
+              <span class="tab-meta-label">Duracao</span>
+              <span class="tab-meta-value">60 min</span>
+            </div>
+            <div class="tab-meta-item">
+              <span class="tab-meta-label">Investimento</span>
+              <span class="tab-meta-value">R$ 180</span>
+            </div>
+          </div>
+        </div>
+        <div class="tab-visual" aria-hidden="true">
+          <svg class="tab-visual-icon" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1"><path d="M20 60 Q30 20 40 40 Q50 60 60 20"/><circle cx="20" cy="60" r="3"/><circle cx="60" cy="20" r="3"/></svg>
+        </div>
+      </div>
+
+      <!-- Panel 5 -->
+      <div class="tab-panel" role="tabpanel" id="panel-5" aria-labelledby="tab-5">
+        <div class="tab-info">
+          <h3>Antiaging com Ouro Coloidal</h3>
+          <p>Tratamento exclusivo que utiliza nanoparticulas de ouro coloidal para potencializar a regeneracao celular e combater os sinais do envelhecimento. O ouro atua como condutor de ativos de alta performance, promovendo firmeza e luminosidade.</p>
+          <ul class="tab-benefits">
+            <li>Nanoparticulas de ouro para regeneracao celular</li>
+            <li>Aumento da firmeza e elasticidade da pele</li>
+            <li>Efeito antioxidante e anti-inflamatorio</li>
+            <li>Luminosidade e aspecto rejuvenescido</li>
+          </ul>
+          <div class="tab-meta">
+            <div class="tab-meta-item">
+              <span class="tab-meta-label">Duracao</span>
+              <span class="tab-meta-value">75 min</span>
+            </div>
+            <div class="tab-meta-item">
+              <span class="tab-meta-label">Investimento</span>
+              <span class="tab-meta-value">R$ 800</span>
+            </div>
+          </div>
+        </div>
+        <div class="tab-visual" aria-hidden="true">
+          <svg class="tab-visual-icon" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1"><circle cx="40" cy="40" r="28"/><circle cx="40" cy="40" r="16"/><line x1="40" y1="12" x2="40" y2="68"/><line x1="12" y1="40" x2="68" y2="40"/></svg>
+        </div>
+      </div>
+
+      <!-- Panel 6 -->
+      <div class="tab-panel" role="tabpanel" id="panel-6" aria-labelledby="tab-6">
+        <div class="tab-info">
+          <h3>Microagulhamento</h3>
+          <p>Tecnica de inducao percutanea de colageno que utiliza microagulhas para criar microcanais na pele, estimulando a producao natural de colageno e elastina. Ideal para tratar cicatrizes, linhas finas, poros dilatados e melasma.</p>
+          <ul class="tab-benefits">
+            <li>Estimulo natural de colageno e elastina</li>
+            <li>Tratamento de cicatrizes e marcas de acne</li>
+            <li>Reducao de poros dilatados e linhas finas</li>
+            <li>Melhora do melasma e uniformidade da pele</li>
+          </ul>
+          <div class="tab-meta">
+            <div class="tab-meta-item">
+              <span class="tab-meta-label">Duracao</span>
+              <span class="tab-meta-value">60 min</span>
+            </div>
+            <div class="tab-meta-item">
+              <span class="tab-meta-label">Investimento</span>
+              <span class="tab-meta-value">R$ 450</span>
+            </div>
+          </div>
+        </div>
+        <div class="tab-visual" aria-hidden="true">
+          <svg class="tab-visual-icon" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1"><line x1="25" y1="15" x2="25" y2="65"/><line x1="35" y1="15" x2="35" y2="65"/><line x1="45" y1="15" x2="45" y2="65"/><line x1="55" y1="15" x2="55" y2="65"/><circle cx="25" cy="65" r="2"/><circle cx="35" cy="65" r="2"/><circle cx="45" cy="65" r="2"/><circle cx="55" cy="65" r="2"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid reveal">
+      <div class="stat">
+        <div class="stat-number" data-target="10">0</div>
+        <div class="stat-label">Anos de experiencia</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number" data-target="1000">0</div>
+        <div class="stat-label">Clientes satisfeitos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number" data-target="98">0</div>
+        <div class="stat-label">Satisfacao dos clientes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DEPOIMENTOS ===== -->
+<section class="depoimentos section-pad" id="depoimentos">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:60px">
+      <span class="section-label">Depoimentos</span>
+      <h2 class="section-title">O que dizem nossos clientes</h2>
+      <div class="section-divider center"></div>
+    </div>
+    <div class="depoimentos-grid">
+      <div class="dep-card reveal">
+        <div class="dep-quote">"</div>
+        <p class="dep-text">A experiencia na Aurum foi transformadora. Desde o primeiro contato, senti um cuidado genuino. O resultado da harmonizacao ficou absolutamente natural -- exatamente o que eu desejava.</p>
+        <p class="dep-author">Carolina Mendes</p>
+        <p class="dep-treatment">Harmonizacao Facial</p>
+      </div>
+      <div class="dep-card reveal">
+        <div class="dep-quote">"</div>
+        <p class="dep-text">Ja frequentei diversas clinicas, mas nenhuma se compara ao nivel de atencao e sofisticacao da Aurum. O tratamento com ouro coloidal deixou minha pele com um brilho que eu nao via ha anos.</p>
+        <p class="dep-author">Fernanda Albuquerque</p>
+        <p class="dep-treatment">Antiaging com Ouro Coloidal</p>
+      </div>
+      <div class="dep-card reveal">
+        <div class="dep-quote">"</div>
+        <p class="dep-text">Profissionalismo impecavel. A limpeza de pele foi o procedimento mais completo que ja fiz. Saio de la me sentindo renovada a cada sessao. Recomendo de olhos fechados.</p>
+        <p class="dep-author">Isabela Rodrigues</p>
+        <p class="dep-treatment">Limpeza de Pele Profunda</p>
+      </div>
+      <div class="dep-card reveal">
+        <div class="dep-quote">"</div>
+        <p class="dep-text">O microagulhamento que fiz na Aurum mudou completamente a textura da minha pele. As cicatrizes de acne diminuiram visivelmente ja na terceira sessao. Equipe excepcional.</p>
+        <p class="dep-author">Juliana Martins</p>
+        <p class="dep-treatment">Microagulhamento</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTATO ===== -->
+<section class="contato section-pad" id="contato">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:60px">
+      <span class="section-label">Fale conosco</span>
+      <h2 class="section-title">Contato</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="contato-grid">
+      <div class="contato-info reveal">
+        <div class="contato-item">
+          <span class="contato-item-label">Endereco</span>
+          <span class="contato-item-value">Alameda Santos, 1.000 -- Jardins, Sao Paulo -- SP</span>
+        </div>
+        <div class="contato-item">
+          <span class="contato-item-label">WhatsApp</span>
+          <span class="contato-item-value"><a href="https://wa.me/551100000000" target="_blank" rel="noopener">+55 11 0000-0000</a></span>
+        </div>
+        <div class="contato-item">
+          <span class="contato-item-label">Instagram</span>
+          <span class="contato-item-value"><a href="https://instagram.com/aurum.estetica" target="_blank" rel="noopener">@aurum.estetica</a></span>
+        </div>
+        <div class="contato-item">
+          <span class="contato-item-label">Horario de funcionamento</span>
+          <span class="contato-item-value">Segunda a Sabado, 9h as 19h</span>
+        </div>
+      </div>
+      <form class="contato-form reveal" id="contactForm" novalidate>
+        <div class="form-group">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" name="nome" required autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="telefone">Telefone</label>
+          <input type="tel" id="telefone" name="telefone" autocomplete="tel">
+        </div>
+        <div class="form-group">
+          <label for="mensagem">Mensagem</label>
+          <textarea id="mensagem" name="mensagem" required></textarea>
+        </div>
+        <button type="submit" class="form-submit">Enviar mensagem</button>
+        <div class="form-success" id="formSuccess">
+          <p>Mensagem enviada com sucesso. Entraremos em contato em breve.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2026 Aurum Clinica de Estetica. Todos os direitos reservados.</p>
+    <p style="margin-top:8px"><a href="https://williamcruz-ui.github.io">williamcruz-ui.github.io</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ===== THEME TOGGLE ===== */
+  const themeToggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  const savedTheme = localStorage.getItem('aurum-theme');
+
+  if (savedTheme) {
+    root.setAttribute('data-theme', savedTheme);
+  }
+
+  themeToggle.addEventListener('click', function() {
+    const current = root.getAttribute('data-theme');
+    const next = current === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('aurum-theme', next);
+  });
+
+  /* ===== MOBILE MENU ===== */
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+
+  hamburger.addEventListener('click', function() {
+    this.classList.toggle('active');
+    navLinks.classList.toggle('open');
+    const expanded = this.getAttribute('aria-expanded') === 'true';
+    this.setAttribute('aria-expanded', String(!expanded));
+  });
+
+  // Close mobile menu on link click
+  navLinks.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* ===== TREATMENT TABS ===== */
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      // Remove active from all
+      tabBtns.forEach(function(b) {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      tabPanels.forEach(function(p) { p.classList.remove('active'); });
+
+      // Activate clicked
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      var panelId = btn.getAttribute('aria-controls');
+      document.getElementById(panelId).classList.add('active');
+    });
+  });
+
+  /* ===== SCROLL REVEAL (IntersectionObserver) ===== */
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (prefersReduced) {
+    // Show everything immediately
+    document.querySelectorAll('.reveal').forEach(function(el) {
+      el.classList.add('visible');
+    });
+  } else {
+    var revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(function(el) {
+      revealObserver.observe(el);
+    });
+  }
+
+  /* ===== ANIMATED COUNTER ===== */
+  var countersAnimated = false;
+  var statsSection = document.querySelector('.stats');
+
+  function animateCounters() {
+    if (countersAnimated) return;
+    countersAnimated = true;
+
+    document.querySelectorAll('.stat-number').forEach(function(counter) {
+      var target = parseInt(counter.getAttribute('data-target'), 10);
+      var suffix = '';
+      if (target === 10) suffix = '+';
+      else if (target === 1000) suffix = '+';
+      else if (target === 98) suffix = '%';
+
+      var duration = 2000;
+      var startTime = null;
+
+      function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        var progress = Math.min((timestamp - startTime) / duration, 1);
+        // Ease out cubic
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var current = Math.floor(eased * target);
+        counter.textContent = current.toLocaleString('pt-BR') + suffix;
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          counter.textContent = target.toLocaleString('pt-BR') + suffix;
+        }
+      }
+
+      if (prefersReduced) {
+        counter.textContent = target.toLocaleString('pt-BR') + suffix;
+      } else {
+        requestAnimationFrame(step);
+      }
+    });
+  }
+
+  var counterObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        animateCounters();
+        counterObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  if (statsSection) {
+    counterObserver.observe(statsSection);
+  }
+
+  /* ===== CONTACT FORM ===== */
+  var contactForm = document.getElementById('contactForm');
+  var formSuccess = document.getElementById('formSuccess');
+
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Basic validation
+    var nome = document.getElementById('nome').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var mensagem = document.getElementById('mensagem').value.trim();
+
+    if (!nome || !email || !mensagem) return;
+
+    // Show success
+    formSuccess.classList.add('show');
+    contactForm.reset();
+
+    // Hide after 5 seconds
+    setTimeout(function() {
+      formSuccess.classList.remove('show');
+    }, 5000);
+  });
+
+  /* ===== NAV BACKGROUND ON SCROLL ===== */
+  var nav = document.querySelector('.nav');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 80) {
+      nav.style.boxShadow = '0 1px 20px rgba(0,0,0,0.3)';
+    } else {
+      nav.style.boxShadow = 'none';
+    }
+  }, { passive: true });
+
+})();
+</script>
+</body>
+</html>
