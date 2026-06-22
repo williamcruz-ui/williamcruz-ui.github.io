@@ -8,13 +8,15 @@
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%;overflow:hidden}
   body{
-    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
-    background:linear-gradient(160deg,#2D1B69 0%,#1a0533 100%);
-    color:#e8dff5;
+    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',Helvetica,Arial,sans-serif;
+    background:#f5f5f7;
+    color:#1d1d1f;
     display:flex;
     justify-content:center;
     align-items:center;
     min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
   }
   #root{width:100%;max-width:420px;margin:0 auto;padding:12px}
 
@@ -32,7 +34,7 @@
     z-index:100;
   }
 
-  /* Breathing animation */
+  /* Creature animations */
   @keyframes breathe{
     0%,100%{transform:scaleY(1) scaleX(1)}
     50%{transform:scaleY(1.04) scaleX(0.97)}
@@ -64,12 +66,25 @@
     50%{opacity:1}
   }
   @keyframes modalIn{
-    from{opacity:0;transform:scale(0.85)}
-    to{opacity:1;transform:scale(1)}
+    from{opacity:0;transform:scale(0.92) translateY(10px)}
+    to{opacity:1;transform:scale(1) translateY(0)}
   }
-  @keyframes barStripe{
-    0%{background-position:0 0}
-    100%{background-position:20px 0}
+  @keyframes modalBgIn{
+    from{opacity:0}
+    to{opacity:1}
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(8px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .emote-float,
+    .creature-container {
+      animation: none !important;
+    }
+    .emote-float { display: none; }
   }
 </style>
 </head>
@@ -132,6 +147,35 @@ function formatTime(ms) {
   const sec = s % 60;
   return `${m}m ${sec < 10 ? '0' : ''}${sec}s`;
 }
+
+/* ================================================================
+   DESIGN TOKENS
+   ================================================================ */
+const T = {
+  // Apple system colors
+  green: '#34c759',
+  yellow: '#ffcc00',
+  orange: '#ff9500',
+  red: '#ff3b30',
+  blue: '#007aff',
+  indigo: '#5856d6',
+  pink: '#ff2d55',
+  teal: '#5ac8fa',
+  purple: '#af52de',
+  // Surfaces
+  cardBg: 'rgba(255,255,255,0.92)',
+  cardBorder: 'rgba(0,0,0,0.06)',
+  deviceBg: '#ffffff',
+  deviceShadow: '0 2px 40px rgba(0,0,0,0.08), 0 0 1px rgba(0,0,0,0.1)',
+  // Text
+  label: '#86868b',
+  secondaryLabel: '#aeaeb2',
+  // Radii
+  deviceRadius: 28,
+  cardRadius: 16,
+  pillRadius: 980,
+  barRadius: 100,
+};
 
 /* ================================================================
    SOUND ENGINE (Web Audio API)
@@ -215,7 +259,7 @@ function CreatureSVG({ healthPct, stage, sleeping, dead, onClick, bouncing }) {
   };
 
   return (
-    <div style={containerStyle} onClick={onClick}>
+    <div className="creature-container" style={containerStyle} onClick={onClick}>
       <svg viewBox="0 0 200 200" width={160 * scale} height={160 * scale} xmlns="http://www.w3.org/2000/svg">
         {/* Ears */}
         <ellipse cx="60" cy="50" rx="20" ry="30" fill={bodyColor} />
@@ -237,36 +281,28 @@ function CreatureSVG({ healthPct, stage, sleeping, dead, onClick, bouncing }) {
         {/* Face */}
         {dead ? (
           <>
-            {/* X eyes */}
             <line x1="82" y1="70" x2="92" y2="80" stroke="#333" strokeWidth="3" strokeLinecap="round" />
             <line x1="92" y1="70" x2="82" y2="80" stroke="#333" strokeWidth="3" strokeLinecap="round" />
             <line x1="108" y1="70" x2="118" y2="80" stroke="#333" strokeWidth="3" strokeLinecap="round" />
             <line x1="118" y1="70" x2="108" y2="80" stroke="#333" strokeWidth="3" strokeLinecap="round" />
-            {/* Frown */}
             <path d="M85 98 Q100 90 115 98" fill="none" stroke="#333" strokeWidth="2.5" strokeLinecap="round" />
           </>
         ) : sleeping ? (
           <>
-            {/* Closed eyes */}
             <path d="M80 76 Q87 72 94 76" fill="none" stroke="#333" strokeWidth="2.5" strokeLinecap="round" />
             <path d="M106 76 Q113 72 120 76" fill="none" stroke="#333" strokeWidth="2.5" strokeLinecap="round" />
-            {/* Sleepy mouth */}
             <ellipse cx="100" cy="94" rx="4" ry="3" fill="#333" />
           </>
         ) : (
           <>
-            {/* Eyes */}
             <circle cx="87" cy="74" r="6" fill="#fff" />
             <circle cx="113" cy="74" r="6" fill="#fff" />
             <circle cx="89" cy="73" r="3" fill="#222" />
             <circle cx="115" cy="73" r="3" fill="#222" />
-            {/* Eye shine */}
             <circle cx="90.5" cy="71.5" r="1.2" fill="#fff" />
             <circle cx="116.5" cy="71.5" r="1.2" fill="#fff" />
-            {/* Cheeks */}
             <ellipse cx="74" cy="84" rx="8" ry="5" fill={cheekColor} opacity="0.5" />
             <ellipse cx="126" cy="84" rx="8" ry="5" fill={cheekColor} opacity="0.5" />
-            {/* Mouth */}
             <path d="M92 92 Q100 100 108 92" fill="none" stroke="#333" strokeWidth="2" strokeLinecap="round" />
           </>
         )}
@@ -276,30 +312,40 @@ function CreatureSVG({ healthPct, stage, sleeping, dead, onClick, bouncing }) {
 }
 
 /* ================================================================
-   STAT BAR
+   STAT BAR (Apple-style)
    ================================================================ */
 function StatBar({ label, value, color, icon }) {
-  const barBg = value > 50 ? color : value > 25 ? '#e6a817' : '#e04040';
+  const barColor = value > 50 ? color : value > 25 ? T.orange : T.red;
   return (
     <div style={{
-      display: 'flex', alignItems: 'center', gap: 8,
-      background: 'rgba(255,255,255,0.07)', borderRadius: 20,
-      padding: '6px 12px', minWidth: 0
+      display: 'flex', alignItems: 'center', gap: 10,
+      padding: '8px 0', minWidth: 0
     }}>
-      <span style={{ fontSize: 16, flexShrink: 0 }}>{icon}</span>
+      <div style={{
+        width: 28, height: 28, borderRadius: 8,
+        background: `${barColor}18`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexShrink: 0, color: barColor
+      }}>
+        {icon}
+      </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 3, color: '#c4b5e0' }}>
-          <span>{label}</span>
-          <span>{Math.round(value)}</span>
+        <div style={{
+          display: 'flex', justifyContent: 'space-between',
+          fontSize: 12, fontWeight: 500, marginBottom: 4
+        }}>
+          <span style={{ color: '#3a3a3c' }}>{label}</span>
+          <span style={{ color: T.label, fontVariantNumeric: 'tabular-nums' }}>{Math.round(value)}</span>
         </div>
-        <div style={{ height: 8, borderRadius: 4, background: 'rgba(0,0,0,0.3)', overflow: 'hidden' }}>
+        <div style={{
+          height: 6, borderRadius: T.barRadius,
+          background: 'rgba(0,0,0,0.06)', overflow: 'hidden'
+        }}>
           <div style={{
-            width: `${value}%`, height: '100%', borderRadius: 4,
-            background: `linear-gradient(90deg, ${barBg}, ${barBg}cc)`,
-            transition: 'width 0.4s ease, background 0.4s ease',
-            backgroundSize: value > 50 ? '20px 8px' : undefined,
-            backgroundImage: value > 50 ? `repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(255,255,255,0.08) 8px, rgba(255,255,255,0.08) 16px)` : undefined,
-            animation: value > 50 ? 'barStripe 0.8s linear infinite' : undefined
+            width: `${value}%`, height: '100%',
+            borderRadius: T.barRadius,
+            background: barColor,
+            transition: 'width 0.4s ease, background 0.4s ease'
           }} />
         </div>
       </div>
@@ -308,36 +354,42 @@ function StatBar({ label, value, color, icon }) {
 }
 
 /* ================================================================
-   ACTION BUTTON
+   ACTION BUTTON (Apple pill style)
    ================================================================ */
 function ActionButton({ label, icon, onClick, disabled, color }) {
+  const [pressed, setPressed] = useState(false);
   return (
     <button
       onClick={onClick}
       disabled={disabled}
+      onMouseDown={() => !disabled && setPressed(true)}
+      onMouseUp={() => setPressed(false)}
+      onMouseLeave={() => setPressed(false)}
+      onTouchStart={() => !disabled && setPressed(true)}
+      onTouchEnd={() => setPressed(false)}
       style={{
-        background: disabled ? 'rgba(255,255,255,0.05)' : `linear-gradient(135deg, ${color}dd, ${color}88)`,
-        color: disabled ? '#666' : '#fff',
+        background: disabled ? '#f2f2f7' : color,
+        color: disabled ? '#c7c7cc' : '#fff',
         border: 'none',
-        borderRadius: 14,
+        borderRadius: T.pillRadius,
         padding: '12px 8px',
         fontSize: 13,
         fontWeight: 600,
+        fontFamily: 'inherit',
         cursor: disabled ? 'not-allowed' : 'pointer',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         gap: 4,
-        transition: 'transform 0.15s, box-shadow 0.15s',
-        boxShadow: disabled ? 'none' : `0 4px 12px ${color}44`,
-        transform: 'scale(1)',
-        width: '100%'
+        transition: 'transform 0.2s cubic-bezier(0.25,1,0.5,1), opacity 0.15s',
+        transform: pressed ? 'scale(0.94)' : 'scale(1)',
+        opacity: pressed ? 0.85 : 1,
+        width: '100%',
+        WebkitTapHighlightColor: 'transparent',
+        letterSpacing: '-0.01em'
       }}
-      onMouseDown={e => { if (!disabled) e.currentTarget.style.transform = 'scale(0.93)'; }}
-      onMouseUp={e => { e.currentTarget.style.transform = 'scale(1)'; }}
-      onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
     >
-      <span style={{ fontSize: 20 }}>{icon}</span>
+      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{icon}</span>
       <span>{label}</span>
     </button>
   );
@@ -362,50 +414,69 @@ function FloatingEmote({ emote, id }) {
 }
 
 /* ================================================================
-   INFO MODAL
+   INFO MODAL (Apple sheet style)
    ================================================================ */
 function InfoModal({ onClose, temperament, stage, createdAt }) {
   const alive = Date.now() - createdAt;
+  const rows = [
+    { label: 'Tempo de vida', value: formatTime(alive) },
+    { label: 'Estagio', value: STAGES[stage].name },
+    { label: 'Temperamento', value: temperament.name }
+  ];
   return (
     <div style={{
-      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)',
+      position: 'fixed', inset: 0,
+      background: 'rgba(0,0,0,0.25)',
+      backdropFilter: 'blur(8px)',
+      WebkitBackdropFilter: 'blur(8px)',
       display: 'flex', justifyContent: 'center', alignItems: 'center',
-      zIndex: 200
+      zIndex: 200,
+      animation: 'modalBgIn 0.2s ease-out'
     }} onClick={onClose}>
       <div
         style={{
-          background: 'linear-gradient(135deg, #3a2078, #2a1558)',
-          borderRadius: 20, padding: 28, maxWidth: 320, width: '90%',
-          boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          animation: 'modalIn 0.25s ease-out'
+          background: 'rgba(255,255,255,0.96)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderRadius: 20, padding: '28px 24px', maxWidth: 320, width: '88%',
+          boxShadow: '0 24px 80px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.1)',
+          animation: 'modalIn 0.3s cubic-bezier(0.25,1,0.5,1)'
         }}
         onClick={e => e.stopPropagation()}
       >
-        <h3 style={{ textAlign: 'center', marginBottom: 18, fontSize: 18, color: '#d4bfff' }}>Informacoes</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontSize: 14 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ color: '#a893cc' }}>Tempo de vida:</span>
-            <span style={{ fontWeight: 600 }}>{formatTime(alive)}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ color: '#a893cc' }}>Estagio:</span>
-            <span style={{ fontWeight: 600 }}>{STAGES[stage].name}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ color: '#a893cc' }}>Temperamento:</span>
-            <span style={{ fontWeight: 600 }}>{temperament.name}</span>
-          </div>
-          <div style={{ fontSize: 12, color: '#9a85b8', fontStyle: 'italic', textAlign: 'center', marginTop: 4 }}>
-            {temperament.desc}
-          </div>
+        <h3 style={{
+          textAlign: 'center', marginBottom: 20, fontSize: 18,
+          fontWeight: 700, color: '#1d1d1f', letterSpacing: '-0.02em'
+        }}>Informacoes</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {rows.map((row, i) => (
+            <div key={i} style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '12px 0',
+              borderBottom: i < rows.length - 1 ? '1px solid rgba(0,0,0,0.06)' : 'none',
+              fontSize: 15
+            }}>
+              <span style={{ color: T.label }}>{row.label}</span>
+              <span style={{ fontWeight: 600, color: '#1d1d1f' }}>{row.value}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{
+          fontSize: 13, color: T.label, fontStyle: 'italic',
+          textAlign: 'center', marginTop: 12, lineHeight: 1.4
+        }}>
+          {temperament.desc}
         </div>
         <button
           onClick={onClose}
           style={{
-            display: 'block', margin: '20px auto 0', background: '#6c3fcf',
-            color: '#fff', border: 'none', borderRadius: 10, padding: '10px 32px',
-            fontSize: 14, fontWeight: 600, cursor: 'pointer'
+            display: 'block', margin: '20px auto 0',
+            background: T.blue,
+            color: '#fff', border: 'none', borderRadius: T.pillRadius,
+            padding: '10px 36px',
+            fontSize: 15, fontWeight: 600, fontFamily: 'inherit',
+            cursor: 'pointer', letterSpacing: '-0.01em',
+            WebkitTapHighlightColor: 'transparent'
           }}
         >
           Fechar
@@ -416,70 +487,75 @@ function InfoModal({ onClose, temperament, stage, createdAt }) {
 }
 
 /* ================================================================
-   SVG ICONS (inline, small)
+   SVG ICONS (clean, Apple SF Symbols inspired)
    ================================================================ */
 const Icons = {
   apple: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 2C12 2 9 4 9 7C6 7 3 9 3 13C3 18 7 22 12 22C17 22 21 18 21 13C21 9 18 7 15 7C15 4 12 2 12 2Z"/>
       <path d="M12 2C12 2 14 4 14 6"/>
     </svg>
   ),
   heart: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
     </svg>
   ),
-  sun: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-      <circle cx="12" cy="12" r="5"/>
-      <g stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        <line x1="12" y1="1" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="23"/>
-        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
-        <line x1="1" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="23" y2="12"/>
-        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
-      </g>
+  bolt: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M13 2L4 14h7v8l9-12h-7V2z"/>
     </svg>
   ),
   droplet: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0C19 10 12 2 12 2z"/>
     </svg>
   ),
-  greenHeart: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="#4ade80">
-      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+  plus: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+      <path d="M12 5v14M5 12h14"/>
     </svg>
   ),
   gamepad: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect x="2" y="6" width="20" height="12" rx="4"/><line x1="6" y1="10" x2="6" y2="14"/><line x1="4" y1="12" x2="8" y2="12"/>
       <circle cx="16" cy="10" r="1" fill="currentColor"/><circle cx="18" cy="12" r="1" fill="currentColor"/>
     </svg>
   ),
   moon: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
       <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
     </svg>
   ),
+  sparkles: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5L12 2z"/>
+      <path d="M19 15l.88 3.12L23 19l-3.12.88L19 23l-.88-3.12L15 19l3.12-.88L19 15z" opacity="0.6"/>
+    </svg>
+  ),
+  heartHand: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </svg>
+  ),
   info: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
     </svg>
   ),
   speaker: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14"/><path d="M15.54 8.46a5 5 0 010 7.08"/>
     </svg>
   ),
   speakerOff: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
     </svg>
   ),
-  back: (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+  chevronLeft: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="15 18 9 12 15 6"/>
     </svg>
   )
 };
@@ -713,47 +789,71 @@ function App() {
   const mood = getMood();
   const actionsDisabled = dead || sleeping;
 
+  /* Mood color */
+  const moodColor = dead ? T.red
+    : sleeping ? T.indigo
+    : saude < 25 ? T.red
+    : (saciedade < 30 || felicidade < 30 || energia < 30 || higiene < 30) ? T.orange
+    : T.green;
+
   return (
-    <div style={{ position: 'relative' }}>
-      {/* Top bar */}
+    <div style={{
+      background: T.deviceBg,
+      borderRadius: T.deviceRadius,
+      boxShadow: T.deviceShadow,
+      padding: '16px 20px 20px',
+      position: 'relative',
+      overflow: 'hidden',
+      animation: 'fadeIn 0.4s ease-out'
+    }}>
+      {/* Top navigation bar */}
       <div style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        marginBottom: 8, padding: '0 2px'
+        marginBottom: 4, padding: '0'
       }}>
         <a href="../" style={{
-          color: '#a893cc', textDecoration: 'none', display: 'flex',
-          alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 500
+          color: T.blue, textDecoration: 'none', display: 'flex',
+          alignItems: 'center', gap: 2, fontSize: 15, fontWeight: 400
         }}>
-          {Icons.back} <span>BichoVivo</span>
+          {Icons.chevronLeft} <span>BichoVivo</span>
         </a>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{
-            fontSize: 11, color: '#8b76a8',
-            background: 'rgba(255,255,255,0.06)', borderRadius: 8,
-            padding: '3px 8px'
+            fontSize: 12, color: T.label, fontWeight: 500,
+            letterSpacing: '-0.01em'
           }}>
             {STAGES[stage].name} &middot; {temperament.name}
           </span>
           <button
             onClick={toggleMute}
+            aria-label={muted ? 'Ativar som' : 'Silenciar'}
             style={{
-              background: 'rgba(255,255,255,0.08)', border: 'none',
-              borderRadius: 8, padding: '5px 7px', cursor: 'pointer',
-              color: '#c4b5e0', display: 'flex', alignItems: 'center'
+              background: 'none', border: 'none',
+              padding: 4, cursor: 'pointer',
+              color: muted ? T.secondaryLabel : T.label,
+              display: 'flex', alignItems: 'center',
+              borderRadius: 8,
+              WebkitTapHighlightColor: 'transparent'
             }}
-            title={muted ? 'Ativar som' : 'Silenciar'}
           >
             {muted ? Icons.speakerOff : Icons.speaker}
           </button>
         </div>
       </div>
 
+      {/* Thin separator */}
+      <div style={{
+        height: 1, background: 'rgba(0,0,0,0.06)',
+        margin: '0 -20px 12px', padding: 0
+      }} />
+
       {/* Mood message */}
       <div style={{
-        textAlign: 'center', fontSize: 16, fontWeight: 600,
-        color: dead ? '#ff6b6b' : sleeping ? '#7c9aff' : '#d4bfff',
-        marginBottom: 8, minHeight: 24,
-        animation: (dead || saude < 25) ? 'pulse 1.5s infinite' : 'none'
+        textAlign: 'center', fontSize: 17, fontWeight: 600,
+        color: moodColor,
+        marginBottom: 4, minHeight: 26,
+        animation: (dead || saude < 25) ? 'pulse 1.5s infinite' : 'none',
+        letterSpacing: '-0.02em'
       }}>
         {mood}
       </div>
@@ -762,7 +862,9 @@ function App() {
       <div style={{
         position: 'relative',
         display: 'flex', justifyContent: 'center', alignItems: 'center',
-        minHeight: 200, marginBottom: 12
+        minHeight: 190, marginBottom: 8,
+        background: 'radial-gradient(ellipse at center bottom, rgba(0,0,0,0.02) 0%, transparent 70%)',
+        borderRadius: 20
       }}>
         {/* Floating emotes */}
         {emotes.map(e => <FloatingEmote key={e.id} emote={e.emote} id={e.id} />)}
@@ -773,28 +875,28 @@ function App() {
             <div className="emote-float" style={{
               right: '25%', top: '15%',
               animation: 'floatZ 2s ease-out infinite',
-              fontSize: 22, color: '#7c9aff', fontWeight: 700
+              fontSize: 22, color: T.indigo, fontWeight: 700
             }}>Z</div>
             <div className="emote-float" style={{
               right: '20%', top: '25%',
               animation: 'floatZ 2s ease-out infinite 0.6s',
-              fontSize: 16, color: '#7c9aff', fontWeight: 700
+              fontSize: 16, color: T.indigo, fontWeight: 700
             }}>z</div>
             <div className="emote-float" style={{
               right: '30%', top: '10%',
               animation: 'floatZ 2s ease-out infinite 1.2s',
-              fontSize: 12, color: '#7c9aff', fontWeight: 700
+              fontSize: 12, color: T.indigo, fontWeight: 700
             }}>z</div>
           </>
         )}
 
-        {/* Shadow */}
+        {/* Ground shadow */}
         <div style={{
-          position: 'absolute', bottom: 10, left: '50%',
+          position: 'absolute', bottom: 12, left: '50%',
           transform: 'translateX(-50%)',
           width: 80 * STAGES[stage].scale,
-          height: 12,
-          background: 'radial-gradient(ellipse, rgba(0,0,0,0.3) 0%, transparent 70%)',
+          height: 10,
+          background: 'radial-gradient(ellipse, rgba(0,0,0,0.1) 0%, transparent 70%)',
           borderRadius: '50%'
         }} />
 
@@ -808,30 +910,38 @@ function App() {
         />
       </div>
 
-      {/* Stats */}
+      {/* Stats card */}
       <div style={{
-        display: 'grid', gridTemplateColumns: '1fr 1fr',
-        gap: 6, marginBottom: 14
+        background: '#f9f9fb',
+        borderRadius: T.cardRadius,
+        padding: '4px 16px',
+        marginBottom: 16,
+        border: `1px solid ${T.cardBorder}`
       }}>
-        <StatBar label="Saciedade" value={saciedade} color="#4ade80" icon={Icons.apple} />
-        <StatBar label="Felicidade" value={felicidade} color="#f472b6" icon={Icons.heart} />
-        <StatBar label="Energia" value={energia} color="#facc15" icon={Icons.sun} />
-        <StatBar label="Higiene" value={higiene} color="#60a5fa" icon={Icons.droplet} />
-        <div style={{ gridColumn: '1 / -1' }}>
-          <StatBar label="Saude" value={saude} color="#34d399" icon={Icons.greenHeart} />
-        </div>
+        <StatBar label="Saciedade" value={saciedade} color={T.green} icon={Icons.apple} />
+        <div style={{ height: 1, background: 'rgba(0,0,0,0.04)' }} />
+        <StatBar label="Felicidade" value={felicidade} color={T.pink} icon={Icons.heart} />
+        <div style={{ height: 1, background: 'rgba(0,0,0,0.04)' }} />
+        <StatBar label="Energia" value={energia} color={T.yellow} icon={Icons.bolt} />
+        <div style={{ height: 1, background: 'rgba(0,0,0,0.04)' }} />
+        <StatBar label="Higiene" value={higiene} color={T.blue} icon={Icons.droplet} />
+        <div style={{ height: 1, background: 'rgba(0,0,0,0.04)' }} />
+        <StatBar label="Saude" value={saude} color={T.green} icon={Icons.plus} />
       </div>
 
       {/* Action buttons */}
       {dead ? (
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', padding: '8px 0' }}>
           <button
             onClick={doRestart}
             style={{
-              background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)',
-              color: '#fff', border: 'none', borderRadius: 16,
-              padding: '14px 40px', fontSize: 16, fontWeight: 700,
-              cursor: 'pointer', boxShadow: '0 6px 20px rgba(109,40,217,0.4)'
+              background: T.blue,
+              color: '#fff', border: 'none', borderRadius: T.pillRadius,
+              padding: '14px 44px', fontSize: 17, fontWeight: 600,
+              fontFamily: 'inherit',
+              cursor: 'pointer',
+              letterSpacing: '-0.02em',
+              WebkitTapHighlightColor: 'transparent'
             }}
           >
             Recomecar
@@ -840,21 +950,22 @@ function App() {
       ) : (
         <div style={{
           display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 8
+          gap: 10
         }}>
-          <ActionButton label="Alimentar" icon={Icons.apple} onClick={doFeed} disabled={actionsDisabled} color="#22863a" />
-          <ActionButton label="Brincar" icon={Icons.gamepad} onClick={doPlay} disabled={actionsDisabled} color="#8b5cf6" />
-          <ActionButton label="Dormir" icon={Icons.moon} onClick={doSleep} disabled={actionsDisabled} color="#3b5998" />
-          <ActionButton label="Limpar" icon={Icons.droplet} onClick={doClean} disabled={actionsDisabled} color="#2196f3" />
-          <ActionButton label="Carinho" icon={Icons.heart} onClick={doLove} disabled={actionsDisabled} color="#e91e63" />
-          <ActionButton label="Info" icon={Icons.info} onClick={doInfo} disabled={false} color="#555" />
+          <ActionButton label="Alimentar" icon={Icons.apple}   onClick={doFeed}  disabled={actionsDisabled} color={T.green} />
+          <ActionButton label="Brincar"   icon={Icons.gamepad} onClick={doPlay}  disabled={actionsDisabled} color={T.purple} />
+          <ActionButton label="Dormir"    icon={Icons.moon}    onClick={doSleep} disabled={actionsDisabled} color={T.indigo} />
+          <ActionButton label="Limpar"    icon={Icons.sparkles} onClick={doClean} disabled={actionsDisabled} color={T.blue} />
+          <ActionButton label="Carinho"   icon={Icons.heartHand} onClick={doLove}  disabled={actionsDisabled} color={T.pink} />
+          <ActionButton label="Info"      icon={Icons.info}    onClick={doInfo}  disabled={false} color={T.label} />
         </div>
       )}
 
       {/* Back to portfolio */}
       <div style={{ textAlign: 'center', marginTop: 16 }}>
         <a href="../../" style={{
-          color: '#6b5b8a', textDecoration: 'none', fontSize: 12
+          color: T.secondaryLabel, textDecoration: 'none', fontSize: 13,
+          fontWeight: 400
         }}>
           Voltar ao portfolio
         </a>
