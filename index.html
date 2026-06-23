@@ -457,6 +457,158 @@
       border: none;
     }
 
+    /* ── CV ── */
+    .cv__header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0071e3;
+      color: #fff;
+      border-radius: 980px;
+      padding: 10px 24px;
+      font-size: 15px;
+      font-weight: 400;
+      cursor: pointer;
+      border: none;
+      transition: background 0.3s ease;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .btn-download:hover {
+      background: #0077ed;
+    }
+
+    .btn-download svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .cv__summary {
+      color: #f5f5f7;
+      font-size: 19px;
+      line-height: 1.47;
+      max-width: 720px;
+      margin-bottom: 64px;
+    }
+
+    .cv__block {
+      margin-bottom: 56px;
+    }
+
+    .cv__block:last-child {
+      margin-bottom: 0;
+    }
+
+    .cv__block-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6e6e73;
+      margin-bottom: 32px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .cv__job {
+      margin-bottom: 40px;
+    }
+
+    .cv__job:last-child {
+      margin-bottom: 0;
+    }
+
+    .cv__job-header {
+      margin-bottom: 12px;
+    }
+
+    .cv__job-company {
+      font-size: 21px;
+      font-weight: 700;
+      color: #f5f5f7;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+
+    .cv__job-role {
+      font-size: 17px;
+      font-weight: 400;
+      color: #f5f5f7;
+      margin-top: 2px;
+    }
+
+    .cv__job-period {
+      font-size: 14px;
+      color: #6e6e73;
+      margin-top: 4px;
+    }
+
+    .cv__job-items {
+      list-style: none;
+      padding: 0;
+    }
+
+    .cv__job-items li {
+      color: #86868b;
+      font-size: 15px;
+      line-height: 1.53;
+      padding: 6px 0 6px 20px;
+      position: relative;
+    }
+
+    .cv__job-items li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 14px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #6e6e73;
+    }
+
+    .cv__education-item {
+      color: #f5f5f7;
+      font-size: 17px;
+      line-height: 1.47;
+      margin-bottom: 10px;
+    }
+
+    .cv__education-item span {
+      color: #6e6e73;
+    }
+
+    .cv__skills-group {
+      margin-bottom: 20px;
+    }
+
+    .cv__skills-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .cv__skills-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #f5f5f7;
+      margin-bottom: 6px;
+    }
+
+    .cv__skills-desc {
+      color: #86868b;
+      font-size: 15px;
+      line-height: 1.53;
+    }
+
     /* ── Contact ── */
     .contact__content {
       margin-top: 48px;
@@ -562,6 +714,7 @@
       <div class="nav__links" id="navLinks" aria-hidden="true">
         <a href="#projetos">Projetos</a>
         <a href="#sobre">Sobre</a>
+        <a href="#curriculo">Curr&iacute;culo</a>
         <a href="#contato">Contato</a>
       </div>
       <button class="nav__hamburger" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navLinks">
@@ -661,6 +814,132 @@
           <span class="pill">Excel Avan&ccedil;ado</span>
           <span class="pill">Git</span>
           <span class="pill">HTML/CSS/JS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CURRICULO -->
+  <section class="section" id="curriculo" style="background:#111">
+    <div class="container">
+      <div class="reveal">
+        <p class="section__eyebrow">Curr&iacute;culo</p>
+        <div class="cv__header">
+          <h2 class="section__title section__title--dark">Experi&ecirc;ncia profissional.</h2>
+          <a href="./CV_William_Cruz.pdf" download class="btn-download" aria-label="Baixar curriculo em PDF">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Baixar PDF
+          </a>
+        </div>
+      </div>
+
+      <p class="cv__summary reveal">Analista de dados com ampla experi&ecirc;ncia em Intelig&ecirc;ncia de Mercado e excel&ecirc;ncia comercial. Trabalho com grandes volumes de dados, encontrando padr&otilde;es e extraindo insights acion&aacute;veis para o neg&oacute;cio. Entusiasta de AI aplicada &agrave; produtividade.</p>
+
+      <!-- Experiencia Profissional -->
+      <div class="cv__block reveal">
+        <h3 class="cv__block-title">Experi&ecirc;ncia Profissional</h3>
+
+        <div class="cv__job">
+          <div class="cv__job-header">
+            <div class="cv__job-company">Grupo NC (Grupo EMS)</div>
+            <div class="cv__job-role">Especialista de Produtividade e Efetividade</div>
+            <div class="cv__job-period">Nov/2025 &ndash; Atual</div>
+          </div>
+          <ul class="cv__job-items">
+            <li>Desenvolvi um framework implementado em Databricks/SQL que cruzava tr&ecirc;s auditorias de mercado, de forma otimizada e escal&aacute;vel, utilizando CTEs para agrupamentos de dados. O output trazia potencial de mercado de cada SKU em cada PDV, market share, perfil de compra (recorr&ecirc;ncia, fit com portf&oacute;lio, cohort, churn) e segmenta&ccedil;&atilde;o qualificada das lojas (diamante, ouro, prata e bronze).</li>
+            <li>Manuten&ccedil;&atilde;o de dashboards em Power BI, com modelagem de dados em esquema estrela (fato/dimens&atilde;o) e governan&ccedil;a dos dados (documenta&ccedil;&atilde;o, padroniza&ccedil;&atilde;o de fontes e versionamento).</li>
+            <li>Elo entre equipe de engenharia de dados e front-end em projeto de CRM, definindo l&oacute;gica de c&aacute;lculo de indicadores de execu&ccedil;&atilde;o (mix de produtos, giro, pre&ccedil;o m&eacute;dio e positiva&ccedil;&atilde;o) e indicadores de performance (market share, penetra&ccedil;&atilde;o de mercado, evolu&ccedil;&atilde;o, cobertura de metas).</li>
+            <li>Gest&atilde;o da premia&ccedil;&atilde;o do time comercial: gest&atilde;o dos KPIs, desdobramento do or&ccedil;amento da BU em cotas para representantes, apura&ccedil;&atilde;o da premia&ccedil;&atilde;o.</li>
+            <li>Auditorias de mercado IQVIA (PMB, FMB, MDTR, NPS, NDDD e INTE) e Close-Up International (RM, TDD, TD, CDD, MARKET e TARGETING).</li>
+            <li>SQL (Azure Databricks) para ETL, aplicando regras de neg&oacute;cio no datalake para otimizar performance dos dashboards e reduzir consumo de capacity do workspace.</li>
+          </ul>
+        </div>
+
+        <div class="cv__job">
+          <div class="cv__job-header">
+            <div class="cv__job-company">Grupo NC (Grupo EMS)</div>
+            <div class="cv__job-role">Analista S&ecirc;nior de Intelig&ecirc;ncia de Mercado</div>
+            <div class="cv__job-period">Ago/2024 &ndash; Nov/2025</div>
+          </div>
+          <ul class="cv__job-items">
+            <li>Governan&ccedil;a de dados, manuten&ccedil;&atilde;o e desenvolvimento de dashboards em Power BI.</li>
+            <li>Manuten&ccedil;&atilde;o dos mercados montados: acompanhamento de novos produtos, transfer&ecirc;ncia de demanda para outras classes terap&ecirc;uticas.</li>
+            <li>Apresenta&ccedil;&atilde;o de resultados e comit&ecirc;s comerciais para executivos (performance da BU, crescimento, market share, penetra&ccedil;&atilde;o, index de pre&ccedil;o, benchmarking de lan&ccedil;amentos).</li>
+            <li>Estudos ad-hoc de mercado para explora&ccedil;&atilde;o de oportunidades de lan&ccedil;amentos de novos SKUs e mol&eacute;culas.</li>
+            <li>Embaixador de AI: ciclo de 6 meses de treinamentos em Microsoft Copilot (LLMs, prompts, agentes aut&ocirc;nomos). Entregou agente de AI que monitorava mercados montados, otimizando +12 horas mensais de trabalho operacional.</li>
+          </ul>
+        </div>
+
+        <div class="cv__job">
+          <div class="cv__job-header">
+            <div class="cv__job-company">Laborat&oacute;rio Crist&aacute;lia</div>
+            <div class="cv__job-role">Analista Sr. de Intelig&ecirc;ncia de Mercado e Planejamento</div>
+            <div class="cv__job-period">Dez/2022 &ndash; Ago/2024</div>
+          </div>
+          <ul class="cv__job-items">
+            <li>Automação em Power Automate para coletar pre&ccedil;os em licita&ccedil;&otilde;es p&uacute;blicas, eliminando levantamento manual.</li>
+            <li>Bases de auditoria IQVIA e Close-Up International para intelig&ecirc;ncia de mercado e planejamento comercial.</li>
+            <li>Manuten&ccedil;&atilde;o dos mercados montados e apresenta&ccedil;&otilde;es de resultados mensais para o dono da empresa.</li>
+            <li>Estudos ad-hoc para o time de marketing.</li>
+          </ul>
+        </div>
+
+        <div class="cv__job">
+          <div class="cv__job-header">
+            <div class="cv__job-company">Laborat&oacute;rio Crist&aacute;lia</div>
+            <div class="cv__job-role">Analista Pl. de Produtividade e Intelig&ecirc;ncia Competitiva</div>
+            <div class="cv__job-period">Mai/2022 &ndash; Dez/2022</div>
+          </div>
+          <ul class="cv__job-items">
+            <li>Iniciativas de produtividade e intelig&ecirc;ncia competitiva para a &aacute;rea comercial.</li>
+            <li>Gest&atilde;o da premia&ccedil;&atilde;o da for&ccedil;a de vendas.</li>
+            <li>Governan&ccedil;a dos dashboards em Power BI.</li>
+          </ul>
+        </div>
+
+        <div class="cv__job">
+          <div class="cv__job-header">
+            <div class="cv__job-company">UnitedHealth Group/Amil, SulAm&eacute;rica, Unimed Campinas</div>
+            <div class="cv__job-role">Opera&ccedil;&otilde;es em Sa&uacute;de Suplementar</div>
+            <div class="cv__job-period">Nov/2013 &ndash; Mai/2022</div>
+          </div>
+          <ul class="cv__job-items">
+            <li>9 anos em opera&ccedil;&otilde;es de planos de sa&uacute;de, com reconhecimento &ldquo;Colaborador Destaque do Ano 2015&rdquo; (Amil/UnitedHealth Group).</li>
+            <li>&Aacute;reas: Comercial, P&oacute;s-vendas (B2B) e gest&atilde;o da rede credenciada.</li>
+            <li>Materiais para comit&ecirc;s de sinistralidade para reajustes contratuais e manuten&ccedil;&atilde;o do breakeven dos contratos.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Formacao -->
+      <div class="cv__block reveal">
+        <h3 class="cv__block-title">Forma&ccedil;&atilde;o</h3>
+        <p class="cv__education-item">Gest&atilde;o de Recursos Humanos &mdash; IESCAMP <span>(2012&ndash;2014) &mdash; Conclu&iacute;do</span></p>
+        <p class="cv__education-item">Engenharia de Produ&ccedil;&atilde;o &mdash; UNIP <span>(2017&ndash;atual) &mdash; 8 semestres cursados</span></p>
+      </div>
+
+      <!-- Competencias -->
+      <div class="cv__block reveal">
+        <h3 class="cv__block-title">Compet&ecirc;ncias T&eacute;cnicas</h3>
+
+        <div class="cv__skills-group">
+          <div class="cv__skills-label">Dados, BI &amp; AI</div>
+          <p class="cv__skills-desc">Azure Databricks (SQL), Power BI (DAX avan&ccedil;ado, modelagem em esquema estrela, RLS, performance, documenta&ccedil;&atilde;o), Excel avan&ccedil;ado, constru&ccedil;&atilde;o de agentes de IA.</p>
+        </div>
+
+        <div class="cv__skills-group">
+          <div class="cv__skills-label">Automa&ccedil;&atilde;o &amp; Processos</div>
+          <p class="cv__skills-desc">Power Automate (automa&ccedil;&atilde;o de coleta de dados, integra&ccedil;&otilde;es, workflows recorrentes), padroniza&ccedil;&atilde;o e documenta&ccedil;&atilde;o.</p>
+        </div>
+
+        <div class="cv__skills-group">
+          <div class="cv__skills-label">Mercado &amp; Performance Comercial</div>
+          <p class="cv__skills-desc">Auditorias IQVIA e Close-Up International, desdobramento de metas sell-in/sell-out, segmenta&ccedil;&atilde;o qualificada de PDVs/clientes, defini&ccedil;&atilde;o de OKRs e KPIs.</p>
+        </div>
+
+        <div class="cv__skills-group">
+          <div class="cv__skills-label">Idiomas</div>
+          <p class="cv__skills-desc">Portugu&ecirc;s (nativo), Ingl&ecirc;s (leitura t&eacute;cnica avan&ccedil;ada, conversa&ccedil;&atilde;o b&aacute;sica).</p>
         </div>
       </div>
     </div>
