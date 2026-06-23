@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="SalesFlow - Gestao comercial inteligente. CRM completo com dashboard de KPIs, gestao de clientes e fornecedores, pipeline de vendas e assistente de IA integrado.">
+  <title>SalesFlow | Gestao Comercial Inteligente</title>
+
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+
+    /* ── Focus ── */
+    :focus-visible {
+      outline: 3px solid #0071e3;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    /* ── Typography & Base ── */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #000;
+      color: #1d1d1f;
+      line-height: 1.47;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      font-size: 17px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul { list-style: none; }
+
+    /* ── Scroll-reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Container ── */
+    .container {
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 22px;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 44px;
+      background: rgba(29, 29, 31, 0.72);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 44px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 22px;
+    }
+
+    .nav__brand {
+      font-size: 18px;
+      font-weight: 700;
+      color: #f5f5f7;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .nav__links a {
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(245, 245, 247, 0.8);
+      transition: color 0.3s ease;
+      letter-spacing: 0;
+    }
+
+    .nav__links a:hover,
+    .nav__links a:focus-visible {
+      color: #fff;
+    }
+
+    /* Hamburger */
+    .nav__hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav__hamburger span {
+      display: block;
+      width: 18px;
+      height: 1px;
+      background: #f5f5f7;
+      border-radius: 1px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+      .nav__hamburger {
+        display: flex;
+      }
+
+      .nav__links {
+        position: fixed;
+        top: 44px;
+        left: 0;
+        right: 0;
+        background: rgba(29, 29, 31, 0.98);
+        backdrop-filter: saturate(180%) blur(20px);
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+      }
+
+      .nav__links[aria-hidden="false"] {
+        max-height: 260px;
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .nav__links a {
+        padding: 12px 24px;
+        font-size: 14px;
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: #000;
+      padding: 120px 22px 100px;
+    }
+
+    .hero__content {
+      max-width: 780px;
+    }
+
+    .hero__title {
+      font-size: clamp(48px, 8vw, 80px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      color: #f5f5f7;
+      margin-bottom: 24px;
+    }
+
+    .hero__subtitle {
+      font-size: 21px;
+      font-weight: 400;
+      line-height: 1.47;
+      color: #6e6e73;
+      max-width: 600px;
+      margin: 0 auto 44px;
+    }
+
+    .hero__ctas {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .hero__note {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #6e6e73;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-block;
+      background: #0071e3;
+      color: #fff;
+      border-radius: 980px;
+      padding: 8px 22px;
+      font-size: 17px;
+      font-weight: 400;
+      cursor: pointer;
+      border: none;
+      transition: background 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      background: #0077ed;
+    }
+
+    .btn-primary--large {
+      padding: 12px 32px;
+      font-size: 19px;
+    }
+
+    .link-cta {
+      display: inline-block;
+      font-size: 17px;
+      color: #0066cc;
+      font-weight: 400;
+      transition: color 0.3s ease;
+    }
+
+    .link-cta:hover {
+      color: #0077ed;
+    }
+
+    .link-cta--light {
+      color: #2997ff;
+    }
+
+    .link-cta--light:hover {
+      color: #6cb6ff;
+    }
+
+    /* ── Sections ── */
+    .section {
+      padding: 100px 0;
+    }
+
+    .section--light {
+      background: #fbfbfd;
+    }
+
+    .section--dark {
+      background: #000;
+    }
+
+    .section--gray {
+      background: #f5f5f7;
+    }
+
+    .section__eyebrow {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section__eyebrow--dark {
+      color: #6e6e73;
+    }
+
+    .section__eyebrow--accent {
+      color: #0071e3;
+    }
+
+    .section__title {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .section__title--light {
+      color: #1d1d1f;
+    }
+
+    .section__title--dark {
+      color: #f5f5f7;
+    }
+
+    .section__subtitle {
+      font-size: 19px;
+      font-weight: 400;
+      line-height: 1.47;
+      max-width: 600px;
+    }
+
+    .section__subtitle--light {
+      color: #6e6e73;
+    }
+
+    .section__subtitle--dark {
+      color: #6e6e73;
+    }
+
+    .section__header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .section__header .section__subtitle {
+      margin: 0 auto;
+    }
+
+    /* ── Features Grid ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 48px;
+    }
+
+    .feature-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px 32px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .feature-card__icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 20px;
+      color: #0071e3;
+    }
+
+    .feature-card__title {
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #1d1d1f;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .feature-card__desc {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.47;
+      color: #6e6e73;
+    }
+
+    @media (max-width: 900px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card {
+        padding: 32px 24px;
+      }
+    }
+
+    /* ── Preview/Mockup ── */
+    .preview {
+      text-align: center;
+      padding: 100px 0 120px;
+    }
+
+    .preview__header {
+      margin-bottom: 56px;
+    }
+
+    .mockup {
+      max-width: 860px;
+      margin: 0 auto;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #1d1d1f;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06);
+    }
+
+    .mockup__toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #2d2d2f;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mockup__dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .mockup__dot--red { background: #ff5f57; }
+    .mockup__dot--yellow { background: #febc2e; }
+    .mockup__dot--green { background: #28c840; }
+
+    .mockup__url {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      color: #6e6e73;
+      margin-left: -36px;
+    }
+
+    .mockup__body {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      min-height: 420px;
+    }
+
+    .mockup__sidebar {
+      background: #161617;
+      padding: 24px 16px;
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .mockup__sidebar-brand {
+      font-size: 15px;
+      font-weight: 600;
+      color: #f5f5f7;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mockup__sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #86868b;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .mockup__sidebar-item--active {
+      background: rgba(0, 113, 227, 0.15);
+      color: #2997ff;
+    }
+
+    .mockup__sidebar-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .mockup__main {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .mockup__main-header {
+      font-size: 22px;
+      font-weight: 600;
+      color: #f5f5f7;
+      letter-spacing: -0.02em;
+    }
+
+    .mockup__stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .mockup__stat-card {
+      background: #2d2d2f;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .mockup__stat-label {
+      font-size: 11px;
+      color: #86868b;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .mockup__stat-value {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #f5f5f7;
+    }
+
+    .mockup__stat-value--green { color: #30d158; }
+    .mockup__stat-value--blue { color: #0a84ff; }
+    .mockup__stat-value--orange { color: #ff9f0a; }
+
+    .mockup__chart-area {
+      flex: 1;
+      background: #2d2d2f;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+      min-height: 160px;
+    }
+
+    .mockup__chart-title {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #86868b;
+    }
+
+    .mockup__chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 100px;
+      padding-top: 20px;
+    }
+
+    .mockup__chart-bar {
+      flex: 1;
+      border-radius: 4px 4px 0 0;
+      min-height: 8px;
+      transition: height 0.3s ease;
+    }
+
+    @media (max-width: 700px) {
+      .mockup__body {
+        grid-template-columns: 1fr;
+      }
+
+      .mockup__sidebar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 12px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        gap: 4px;
+      }
+
+      .mockup__sidebar-brand {
+        width: 100%;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+      }
+
+      .mockup__sidebar-item {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+
+      .mockup__stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── Tech Stack ── */
+    .tech-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+      margin-top: 48px;
+    }
+
+    .tech-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .tech-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .tech-item__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .tech-item__icon svg {
+      width: 20px;
+      height: 20px;
+      color: #0071e3;
+    }
+
+    .tech-item__name {
+      font-size: 17px;
+      font-weight: 600;
+      color: #1d1d1f;
+      letter-spacing: -0.01em;
+    }
+
+    .tech-desc {
+      font-size: 17px;
+      line-height: 1.58;
+      color: #6e6e73;
+    }
+
+    .tech-desc p + p {
+      margin-top: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .tech-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+
+    /* ── CTA Section ── */
+    .cta-section {
+      text-align: center;
+      padding: 120px 0;
+    }
+
+    .cta-section__title {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: #f5f5f7;
+      margin-bottom: 32px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-section__actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .cta-section__note {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #6e6e73;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      background: #1d1d1f;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    .footer__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer__copy {
+      font-size: 12px;
+      color: #6e6e73;
+    }
+
+    .footer__link {
+      font-size: 12px;
+      color: rgba(245, 245, 247, 0.8);
+      transition: color 0.3s ease;
+    }
+
+    .footer__link:hover {
+      color: #fff;
+    }
+
+    @media (max-width: 600px) {
+      .footer__inner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav class="nav" role="navigation" aria-label="Navegacao principal">
+    <div class="nav__inner">
+      <a href="../" class="nav__brand" aria-label="Voltar ao portfolio">SalesFlow</a>
+
+      <button class="nav__hamburger" aria-label="Abrir menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav__links" aria-hidden="true">
+        <a href="#features">Features</a>
+        <a href="#tecnologia">Tecnologia</a>
+        <a href="#acesso">Acesso</a>
+        <a href="../">Portfolio</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero" aria-label="Apresentacao do SalesFlow">
+    <div class="hero__content reveal">
+      <h1 class="hero__title">SalesFlow</h1>
+      <p class="hero__subtitle">
+        Gestao comercial inteligente. CRM completo com dashboard de KPIs, gestao de clientes e fornecedores, pipeline de vendas e assistente de IA integrado.
+      </p>
+      <div class="hero__ctas">
+        <a href="https://salesflow-williamcruz.vercel.app" class="btn-primary" target="_blank" rel="noopener noreferrer">Acessar SalesFlow</a>
+        <a href="#features" class="link-cta link-cta--light">
+          Conhecer Features
+          <svg width="7" height="10" viewBox="0 0 7 10" fill="none" style="display:inline-block;margin-left:4px;vertical-align:middle;" aria-hidden="true">
+            <path d="M1 1L5 5L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+      <p class="hero__note">Hospedado no Vercel</p>
+    </div>
+  </section>
+
+  <!-- ── FEATURES ── -->
+  <section id="features" class="section section--light" aria-label="Features do SalesFlow">
+    <div class="container">
+      <div class="section__header reveal">
+        <p class="section__eyebrow section__eyebrow--accent">Features</p>
+        <h2 class="section__title section__title--light">Tudo que voce precisa para<br>gerir suas vendas.</h2>
+      </div>
+
+      <div class="features-grid">
+
+        <!-- Card 1 — Dashboard -->
+        <article class="feature-card reveal">
+          <svg class="feature-card__icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="4" y="4" width="40" height="40" rx="8" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 32V24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M20 32V18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M28 32V22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M36 32V14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <h3 class="feature-card__title">Dashboard Inteligente</h3>
+          <p class="feature-card__desc">Visao geral das metricas comerciais, KPIs de performance, pipeline de vendas e indicadores de execucao em tempo real.</p>
+        </article>
+
+        <!-- Card 2 — Clientes -->
+        <article class="feature-card reveal">
+          <svg class="feature-card__icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <circle cx="24" cy="16" r="7" stroke="currentColor" stroke-width="2"/>
+            <path d="M10 40c0-7.732 6.268-14 14-14s14 6.268 14 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3 class="feature-card__title">Gestao de Clientes</h3>
+          <p class="feature-card__desc">Cadastro completo de clientes com nome, email, telefone e cidade. Busca rapida e organizacao intuitiva.</p>
+        </article>
+
+        <!-- Card 3 — Fornecedores -->
+        <article class="feature-card reveal">
+          <svg class="feature-card__icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <path d="M8 18L24 8l16 10v20l-16 10L8 38V18z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M24 28V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M8 18l16 10 16-10" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+          <h3 class="feature-card__title">Gestao de Fornecedores</h3>
+          <p class="feature-card__desc">Controle de fornecedores com razao social, CNPJ validado, contato e categoria. Mascaras automaticas de CNPJ e telefone.</p>
+        </article>
+
+        <!-- Card 4 — Pipeline -->
+        <article class="feature-card reveal">
+          <svg class="feature-card__icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <path d="M6 36l10-12 8 6 12-16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M30 14h8v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h3 class="feature-card__title">Pipeline de Vendas</h3>
+          <p class="feature-card__desc">Acompanhe cada etapa do ciclo comercial, do primeiro contato ao fechamento. Valores em BRL com formatacao automatica.</p>
+        </article>
+
+        <!-- Card 5 — NOVA AI -->
+        <article class="feature-card reveal">
+          <svg class="feature-card__icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <path d="M24 4l3.5 10.5L38 18l-10.5 3.5L24 32l-3.5-10.5L10 18l10.5-3.5L24 4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M36 30l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+          <h3 class="feature-card__title">NOVA &mdash; Assistente de IA</h3>
+          <p class="feature-card__desc">Assistente comercial inteligente powered by Google Gemini. Sugere acoes, analisa dados e oferece insights para decisoes estrategicas.</p>
+        </article>
+
+        <!-- Card 6 — Auth -->
+        <article class="feature-card reveal">
+          <svg class="feature-card__icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="20" width="28" height="22" rx="4" stroke="currentColor" stroke-width="2"/>
+            <path d="M16 20V14a8 8 0 1116 0v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="24" cy="31" r="3" fill="currentColor"/>
+            <path d="M24 34v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3 class="feature-card__title">Autenticacao Segura</h3>
+          <p class="feature-card__desc">Login via Supabase com autenticacao segura. Cada usuario ve apenas seus proprios dados.</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SCREENSHOT / PREVIEW ── -->
+  <section class="section section--dark preview" aria-label="Preview da interface">
+    <div class="container">
+      <div class="preview__header reveal">
+        <h2 class="section__title section__title--dark">Interface limpa e objetiva.</h2>
+        <p class="section__subtitle section__subtitle--dark" style="margin:0 auto;">Inspirado no design da Apple. Cada elemento pensado para produtividade.</p>
+      </div>
+
+      <div class="mockup reveal">
+        <div class="mockup__toolbar" aria-hidden="true">
+          <span class="mockup__dot mockup__dot--red"></span>
+          <span class="mockup__dot mockup__dot--yellow"></span>
+          <span class="mockup__dot mockup__dot--green"></span>
+          <span class="mockup__url">salesflow-williamcruz.vercel.app</span>
+        </div>
+        <div class="mockup__body">
+          <aside class="mockup__sidebar" aria-hidden="true">
+            <div class="mockup__sidebar-brand">SalesFlow</div>
+            <div class="mockup__sidebar-item mockup__sidebar-item--active">
+              <svg class="mockup__sidebar-icon" viewBox="0 0 16 16" fill="none">
+                <rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+              Dashboard
+            </div>
+            <div class="mockup__sidebar-item">
+              <svg class="mockup__sidebar-icon" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M2 15c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+              Clientes
+            </div>
+            <div class="mockup__sidebar-item">
+              <svg class="mockup__sidebar-icon" viewBox="0 0 16 16" fill="none">
+                <path d="M2 6l6-4 6 4v8l-6 4-6-4V6z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+              </svg>
+              Fornecedores
+            </div>
+            <div class="mockup__sidebar-item">
+              <svg class="mockup__sidebar-icon" viewBox="0 0 16 16" fill="none">
+                <path d="M2 12l4-5 3 3 5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Vendas
+            </div>
+            <div class="mockup__sidebar-item">
+              <svg class="mockup__sidebar-icon" viewBox="0 0 16 16" fill="none">
+                <path d="M8 2l1.5 4.5L14 8l-4.5 1.5L8 14l-1.5-4.5L2 8l4.5-1.5L8 2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+              </svg>
+              NOVA
+            </div>
+          </aside>
+
+          <div class="mockup__main" aria-hidden="true">
+            <div class="mockup__main-header">Dashboard</div>
+
+            <div class="mockup__stats">
+              <div class="mockup__stat-card">
+                <div class="mockup__stat-label">Receita Mensal</div>
+                <div class="mockup__stat-value mockup__stat-value--green">R$ 84.2k</div>
+              </div>
+              <div class="mockup__stat-card">
+                <div class="mockup__stat-label">Clientes Ativos</div>
+                <div class="mockup__stat-value mockup__stat-value--blue">247</div>
+              </div>
+              <div class="mockup__stat-card">
+                <div class="mockup__stat-label">Taxa Conversao</div>
+                <div class="mockup__stat-value mockup__stat-value--orange">32%</div>
+              </div>
+            </div>
+
+            <div class="mockup__chart-area">
+              <span class="mockup__chart-title">Vendas por Mes</span>
+              <div class="mockup__chart-bars">
+                <div class="mockup__chart-bar" style="height:40%;background:rgba(0,113,227,0.5);"></div>
+                <div class="mockup__chart-bar" style="height:55%;background:rgba(0,113,227,0.55);"></div>
+                <div class="mockup__chart-bar" style="height:45%;background:rgba(0,113,227,0.5);"></div>
+                <div class="mockup__chart-bar" style="height:70%;background:rgba(0,113,227,0.6);"></div>
+                <div class="mockup__chart-bar" style="height:60%;background:rgba(0,113,227,0.55);"></div>
+                <div class="mockup__chart-bar" style="height:80%;background:rgba(0,113,227,0.7);"></div>
+                <div class="mockup__chart-bar" style="height:65%;background:rgba(0,113,227,0.6);"></div>
+                <div class="mockup__chart-bar" style="height:90%;background:rgba(0,113,227,0.8);"></div>
+                <div class="mockup__chart-bar" style="height:75%;background:rgba(0,113,227,0.65);"></div>
+                <div class="mockup__chart-bar" style="height:95%;background:rgba(0,113,227,0.85);"></div>
+                <div class="mockup__chart-bar" style="height:85%;background:rgba(0,113,227,0.75);"></div>
+                <div class="mockup__chart-bar" style="height:100%;background:#0071e3;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TECH STACK ── -->
+  <section id="tecnologia" class="section section--gray" aria-label="Stack tecnologica">
+    <div class="container">
+      <div class="section__header reveal">
+        <p class="section__eyebrow section__eyebrow--accent">Tecnologia</p>
+        <h2 class="section__title section__title--light">Stack moderna e escalavel.</h2>
+      </div>
+
+      <div class="tech-layout reveal">
+        <div class="tech-list">
+
+          <div class="tech-item">
+            <div class="tech-item__icon">
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/>
+                <ellipse cx="10" cy="10" rx="9" ry="4" stroke="currentColor" stroke-width="1.5"/>
+                <ellipse cx="10" cy="10" rx="9" ry="4" stroke="currentColor" stroke-width="1.5" transform="rotate(60 10 10)"/>
+                <ellipse cx="10" cy="10" rx="9" ry="4" stroke="currentColor" stroke-width="1.5" transform="rotate(120 10 10)"/>
+              </svg>
+            </div>
+            <span class="tech-item__name">React 18</span>
+          </div>
+
+          <div class="tech-item">
+            <div class="tech-item__icon">
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M10 2v7l6 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 2l-6 3.5v7L10 16l6-3.5v-7L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M10 9v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="tech-item__name">Supabase (Auth + Database)</span>
+          </div>
+
+          <div class="tech-item">
+            <div class="tech-item__icon">
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M3 17L10 3l7 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M6 11h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="tech-item__name">Vite</span>
+          </div>
+
+          <div class="tech-item">
+            <div class="tech-item__icon">
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M10 2l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="tech-item__name">Google Gemini AI</span>
+          </div>
+
+          <div class="tech-item">
+            <div class="tech-item__icon">
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M4 14l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 16h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="tech-item__name">GitHub + Vercel</span>
+          </div>
+
+        </div>
+
+        <div class="tech-desc">
+          <p>O SalesFlow foi construido com uma stack moderna que prioriza performance, escalabilidade e experiencia do desenvolvedor. O React 18 garante uma interface responsiva e componentizada, enquanto o Supabase oferece autenticacao robusta e banco de dados em tempo real sem a complexidade de um backend tradicional.</p>
+          <p>O Vite proporciona builds ultrarapidos e hot module replacement instantaneo durante o desenvolvimento. A integracao com o Google Gemini potencializa a assistente NOVA, que analisa dados comerciais e sugere acoes estrategicas com inteligencia artificial.</p>
+          <p>O deploy e feito automaticamente via GitHub para o Vercel, garantindo CI/CD continuo e disponibilidade global com edge computing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA FINAL ── -->
+  <section id="acesso" class="section section--dark cta-section" aria-label="Acesso ao SalesFlow">
+    <div class="container">
+      <div class="reveal">
+        <h2 class="cta-section__title">Pronto para otimizar sua gestao comercial?</h2>
+        <div class="cta-section__actions">
+          <a href="https://salesflow-williamcruz.vercel.app" class="btn-primary btn-primary--large" target="_blank" rel="noopener noreferrer">Acessar SalesFlow</a>
+          <a href="https://github.com/williamcruz-ui/salesflow" class="link-cta link-cta--light" target="_blank" rel="noopener noreferrer">
+            Ver codigo no GitHub
+            <svg width="7" height="10" viewBox="0 0 7 10" fill="none" style="display:inline-block;margin-left:4px;vertical-align:middle;" aria-hidden="true">
+              <path d="M1 1L5 5L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+        <p class="cta-section__note">Projeto em desenvolvimento ativo</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__inner">
+        <span class="footer__copy">&copy; 2026 SalesFlow. Um projeto de William Cruz.</span>
+        <a href="../" class="footer__link">Voltar ao Portfolio</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── JS ── -->
+  <script>
+    /* Scroll reveal via IntersectionObserver */
+    (function () {
+      var els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('visible'); });
+        return;
+      }
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      els.forEach(function (el) { observer.observe(el); });
+    })();
+
+    /* Mobile hamburger menu */
+    (function () {
+      var btn = document.querySelector('.nav__hamburger');
+      var links = document.querySelector('.nav__links');
+      if (!btn || !links) return;
+
+      btn.addEventListener('click', function () {
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        links.setAttribute('aria-hidden', String(expanded));
+      });
+
+      /* Close menu when clicking a link */
+      links.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          btn.setAttribute('aria-expanded', 'false');
+          links.setAttribute('aria-hidden', 'true');
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
